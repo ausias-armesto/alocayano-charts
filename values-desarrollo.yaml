@@ -10,3 +10,6 @@ alcoyano:
     var2: "value2"
   minio:
     accessKey: ""
+  colmena:
+    persistentVolumeClaim:
+      claimName: colmena

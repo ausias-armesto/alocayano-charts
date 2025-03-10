@@ -47,6 +47,8 @@ spec:
                 pip install -r /data/{{ .Values.alcoyano.github.repository}}/requirements.txt
                 echo "MIS VARIABLES DE CONFIGURACIÓN SON:"
                 env | grep ALCOYANO
+                echo "LOTES PENDIENTES"
+                ls -al /data/lotes/
                 python /data/{{ .Values.alcoyano.github.repository}}/setup.py --help-commands
             envFrom:
             - secretRef:
@@ -64,7 +66,8 @@ spec:
           - name: repository
             emptyDir: {}
           - name: colmena
-            emptyDir: {}
+            persistentVolumeClaim:
+              claimName: {{ .Values.alcoyano.colmena.persistentVolumeClaim.claimName }}
           - name: lotes
             configMap:
               name: alcoyano-lotes

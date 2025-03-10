@@ -7,6 +7,7 @@
 - Kubectl
 - Helm
 - OpenLens: Recomendable para visualizar los objetos creados en Kubernetes 
+- Requiere un Persistent Volume donde existan las imagenes a procesar
 
 # Instalación
 
