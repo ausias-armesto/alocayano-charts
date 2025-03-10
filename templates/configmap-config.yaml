@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alcoyano-config
+data:
+  ALCOYANO_VAR1: {{ .Values.alcoyano.config.var1 | quote  }}
+  ALCOYANO_VAR2: {{ .Values.alcoyano.config.var2 | quote  }}

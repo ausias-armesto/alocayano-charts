@@ -1,0 +1,12 @@
+
+alcoyano:
+  schedule: "0 0 * * *"
+  github:
+    repository: bast/somepackage # Utiliza tu propio repositorio
+    branch: main
+    token: "MY PAT TOKEN"
+  config:
+    var1: "value1"
+    var2: "value2"
+  minio:
+    accessKey: ""

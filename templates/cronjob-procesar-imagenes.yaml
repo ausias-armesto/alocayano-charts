@@ -1,0 +1,72 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: procesar-imagenes
+  labels:
+    app: alcoyano
+spec:
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  schedule: "{{ .Values.alcoyano.schedule }}"
+  jobTemplate:
+    metadata:
+      labels:
+        app: alcoyano
+    spec:
+      backoffLimit: 0
+      #ttlSecondsAfterFinished: 3600
+      template:
+        metadata:
+          labels:
+            app: alcoyano
+        spec:
+          initContainers:
+          - name: bootstrap
+            image: debian:stable
+            command:
+              - /bin/bash
+              - -c
+              - |
+                apt-get update && apt install -y git
+                git clone --branch {{ .Values.alcoyano.github.branch }} https://github.com/{{ .Values.alcoyano.github.repository}} /data/{{ .Values.alcoyano.github.repository}}
+            envFrom:
+            - secretRef:
+                name: alcoyano-secrets
+            volumeMounts:
+            - name: repository
+              mountPath: /data/{{ .Values.alcoyano.github.repository}}
+          containers:
+          - name: procesar-imagenes
+            image: python:3.9-slim
+            command:
+              - /bin/bash
+              - -c
+              - |
+                pip install -r /data/{{ .Values.alcoyano.github.repository}}/requirements.txt
+                echo "MIS VARIABLES DE CONFIGURACIÓN SON:"
+                env | grep ALCOYANO
+                python /data/{{ .Values.alcoyano.github.repository}}/setup.py --help-commands
+            envFrom:
+            - secretRef:
+                name: alcoyano-secrets
+            - configMapRef:
+                name: alcoyano-config
+            volumeMounts:
+            - name: repository
+              mountPath: /data/{{ .Values.alcoyano.github.repository}}
+            - name: colmena
+              mountPath: /data/colmena
+            - name: lotes
+              mountPath: /data/lotes
+          volumes:
+          - name: repository
+            emptyDir: {}
+          - name: colmena
+            emptyDir: {}
+          - name: lotes
+            configMap:
+              name: alcoyano-lotes
+          restartPolicy: OnFailure
+

@@ -1,0 +1,12 @@
+## NOTE: Añade este nombre de archivo a tu .gitignore cuando añadas tus credenciales
+alcoyano:
+  schedule: "0 0 * * *"
+  github:
+    repository: bast/somepackage # Utiliza tu propio repositorio
+    branch: master
+    token: "MY PAT TOKEN"
+  config:
+    var1: "value1"
+    var2: "value2"
+  minio:
+    accessKey: ""

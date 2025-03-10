@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alcoyano-lotes
+data:
+  lote1.json: |
+    {
+      "id": 1,
+      "nombre": "Lote 1",
+      "descripcion": "Lote 1 de pruebas"
+    }
+  lote2.json: |
+    {
+      "id": 2,
+      "nombre": "Lote 2",
+      "descripcion
